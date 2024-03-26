@@ -2,13 +2,14 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import Login from './Screens/Login';
-import StartScreen from './Screens/StartScreen';
-import Signup from './Screens/Signup';
-import VerifySignup from './Screens/VerifySignup';
-import ForgotPassword from './Screens/ForgotPassword1';
-import ForgotPassword1 from './Screens/ForgotPassword1';
-import ForgotPassword2 from './Screens/ForgotPassword2';
+import Login from '../Screens/Login';
+import StartScreen from '../Screens/StartScreen';
+import Signup from '../Screens/Signup';
+import VerifySignup from '../Screens/VerifySignup';
+import ForgotPassword1 from '../Screens/ForgotPassword1';
+import ForgotPassword2 from '../Screens/ForgotPassword2';
+import Home from '../Screens/Home';
+import TabNavigation from './TabNavigation';
 const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
@@ -44,6 +45,11 @@ const AppNavigator = () => {
           options={{headerShown: false}}
           name="ForgotPassword2"
           component={ForgotPassword2}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="TabNavigation"
+          component={TabNavigation}
         />
       </Stack.Navigator>
     </NavigationContainer>
