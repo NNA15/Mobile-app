@@ -67,7 +67,9 @@ const Login = () => {
             title={'SIGN IN'}
             bg={'#0A8ED9'}
             color={'white'}
-            onClick={() => {}}></CustomButton>
+            onClick={() => {
+              navigation.navigate('TabNavigation')
+            }}></CustomButton>
         </View>
       </View>
 

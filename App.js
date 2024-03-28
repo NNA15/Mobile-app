@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import AppNavigator from './app/AppNavigator'
+import AppNavigator from './app/Navigations/AppNavigator'
 
 const App = () => {
   return (
