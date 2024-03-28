@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,19 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {product} from '../Products';
+import { product } from '../Products';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ProductItem from '../Components/ProductItem';
 
 const Home = () => {
   const [categoryList, setCategoryList] = useState([]);
   const [tshirtList, setTshirtList] = useState([]);
+  const [jeansList, setjeansList] = useState([]);
+  const [shoeList, setshoeList] = useState([]);
+  const [jacketList, setjacketList] = useState([]);
+  const [slipperList, setslipperList] = useState([]);
+  const [trouserList, settrouserList] = useState([]);
+
 
   useEffect(() => {
     let tempCategory = [];
@@ -24,6 +30,11 @@ const Home = () => {
     });
     setCategoryList(tempCategory);
     setTshirtList(product.category[0].data);
+    setjeansList(product.category[1].data);
+    setshoeList(product.category[2].data);
+    setjacketList(product.category[3].data);
+    setslipperList(product.category[4].data);
+    settrouserList(product.category[5].data);
   }, []);
 
   return (
@@ -58,7 +69,7 @@ const Home = () => {
           data={categoryList}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity style={styles.categoryItem}>
                 <Text style={styles.categoryText}>{item.category}</Text>
@@ -83,7 +94,7 @@ const Home = () => {
           data={tshirtList}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <ProductItem item={item}></ProductItem>;
           }}
         />
@@ -92,7 +103,7 @@ const Home = () => {
       <View style={styles.newContainer}>
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>New</Text>
+            <Text style={styles.sectionTitle}>New Slippers</Text>
             <View style={styles.spacer} />
             <TouchableOpacity>
               <Text style={styles.viewAllText}>View All</Text>
@@ -101,14 +112,78 @@ const Home = () => {
           <Text style={styles.sectionDescription}>You've seen it before!</Text>
         </View>
         <FlatList
-          data={tshirtList}
+          data={slipperList}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <ProductItem item={item}></ProductItem>;
           }}
         />
       </View>
+
+      <View style={styles.newContainer}>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Shoe</Text>
+            <View style={styles.spacer} />
+            <TouchableOpacity>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.sectionDescription}>You've seen it before!</Text>
+        </View>
+        <FlatList
+          data={shoeList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return <ProductItem item={item}></ProductItem>;
+          }}
+        />
+      </View>
+
+      <View style={styles.newContainer}>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Jacket</Text>
+            <View style={styles.spacer} />
+            <TouchableOpacity>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.sectionDescription}>You've seen it before!</Text>
+        </View>
+        <FlatList
+          data={jacketList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return <ProductItem item={item}></ProductItem>;
+          }}
+        />
+      </View>
+
+      <View style={styles.newContainer}>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Trousers</Text>
+            <View style={styles.spacer} />
+            <TouchableOpacity>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.sectionDescription}>You've seen it before!</Text>
+        </View>
+        <FlatList
+          data={trouserList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return <ProductItem item={item}></ProductItem>;
+          }}
+        />
+      </View>
+
     </ScrollView>
   );
 };
@@ -152,7 +227,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   categoryTitle: {
-    fontSize: 30,
+    fontSize: 40,
     color: 'black',
     fontWeight: '700',
     paddingBottom: 10,
@@ -161,15 +236,16 @@ const styles = StyleSheet.create({
   categoryItem: {
     backgroundColor: '#0A8ED9',
     marginLeft: 10,
-    width: 100,
-    height: 30,
-    borderRadius: 15,
+    //borderWidth: 1,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   categoryText: {
     textAlign: 'center',
     color: 'white',
+    marginLeft: 10, marginRight: 10
   },
   saleContainer: {
     marginTop: 15,
@@ -183,9 +259,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionTitle: {
-    fontSize: 30,
+    fontSize: 25,
     color: 'black',
-    fontWeight: '700',
+    fontWeight: '500',
   },
   spacer: {
     flex: 1,
@@ -200,8 +276,11 @@ const styles = StyleSheet.create({
     color: '#9B9B9B',
   },
   newContainer: {
-    marginTop: 15,
-    paddingLeft: 20,
+    marginTop: 20,
+    fontSize: 18,
+    marginLeft: 20,
+    fontWeight: '600',
+    color: '#000',
   },
 });
 
