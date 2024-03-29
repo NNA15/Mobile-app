@@ -12,8 +12,12 @@ import {
 import { product } from '../Products';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ProductItem from '../Components/ProductItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemToCart, addToWishlist } from '../redux/actions/Actions';
 
 const Home = () => {
+
+  const dispatch = useDispatch();
   const [categoryList, setCategoryList] = useState([]);
   const [tshirtList, setTshirtList] = useState([]);
   const [jeansList, setjeansList] = useState([]);
@@ -36,7 +40,8 @@ const Home = () => {
     setslipperList(product.category[4].data);
     settrouserList(product.category[5].data);
   }, []);
-
+  const items = useSelector(state => state);
+  console.log(items);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.searchContainer}>
@@ -95,7 +100,17 @@ const Home = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
-            return <ProductItem item={item}></ProductItem>;
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
           }}
         />
       </View>
@@ -116,7 +131,17 @@ const Home = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
-            return <ProductItem item={item}></ProductItem>;
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
           }}
         />
       </View>
@@ -137,7 +162,17 @@ const Home = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
-            return <ProductItem item={item}></ProductItem>;
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
           }}
         />
       </View>
@@ -158,7 +193,17 @@ const Home = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
-            return <ProductItem item={item}></ProductItem>;
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
           }}
         />
       </View>
@@ -179,7 +224,17 @@ const Home = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
-            return <ProductItem item={item}></ProductItem>;
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
           }}
         />
       </View>

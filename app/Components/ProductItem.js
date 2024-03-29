@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
-import { Image } from 'react-native-elements';
+import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native';
+//import { Image } from 'react-native-elements';
 
-const ProductItem = ({ item }) => {
+const ProductItem = ({ item, onAddWishlist, onAddToCart }) => {
   return (
     <TouchableOpacity
       style={{
@@ -62,10 +62,9 @@ const ProductItem = ({ item }) => {
               borderRadius: 10,
               marginRight: 15,
             }}
-          // onPress={() => {
-          //   onAddToCart(item);
-          // }}
-          >
+            onPress={() => {
+              onAddToCart(item);
+            }}>
             <Text style={{ color: '#000' }}>Add to Cart</Text>
           </TouchableOpacity>
         </View>
@@ -82,9 +81,9 @@ const ProductItem = ({ item }) => {
             top: 10,
             right: 10,
           }}
-        // onPress={() => {
-        //   onAddWishlist(item);
-        // }}
+          onPress={() => {
+            onAddWishlist(item);
+          }}
         >
           <Image
             source={require('../images/heart.png')}
