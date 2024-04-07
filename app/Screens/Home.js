@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { product } from '../Products';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import ProductItem from '../Components/ProductItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, addToWishlist } from '../redux/actions/Actions';
@@ -45,7 +47,7 @@ const Home = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.searchContainer}>
-        <Pressable style={styles.searchInputContainer}>
+        {/* <Pressable style={styles.searchInputContainer}>
           <Icon
             style={styles.searchIcon}
             name="search-outline"
@@ -55,34 +57,66 @@ const Home = () => {
             placeholder="Search"
             placeholderTextColor={'#0A8ED9'}
             style={styles.searchInput}></TextInput>
-        </Pressable>
+        </Pressable> */}
         <TouchableOpacity style={styles.notificationIcon}>
-          <Icon name="notifications-outline" size={26} color={'#0A8ED9'} />
+          <Icon name="search-outline" size={20} color={'#000'} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.chatIcon}>
+        {/* <TouchableOpacity style={styles.chatIcon}>
           <Icon
             name="chatbubble-ellipses-outline"
             size={26}
             color={'#0A8ED9'}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View style={styles.categoryContainer}>
-        <Text style={styles.categoryTitle}>Categories</Text>
+        <Text style={styles.categoryTitle}>Favorites</Text>
         <FlatList
           data={categoryList}
           horizontal
           showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
           renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity style={styles.categoryItem}>
+              <TouchableOpacity style={[styles.categoryItem, { flexDirection: 'row', flex: 1 }]}>
                 <Text style={styles.categoryText}>{item.category}</Text>
               </TouchableOpacity>
             );
           }}
         />
       </View>
+
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+        <Pressable
+          style={{
+            flexDirection: "row",
+            alignItems: "left",
+            padding: 0,
+            width: 125,
+            justifyContent: "left",
+          }}
+        >
+          <Ionicons name="filter-sharp" size={20} color="black" />
+          <Text style={{ marginLeft: 6 }}>Filter</Text>
+        </Pressable>
+
+        <Pressable
+          style={{
+            flexDirection: "row",
+            alignItems: "right",
+            padding: 0,
+            justifyContent: "right",
+            width: 200
+          }}
+        >
+          <MaterialCommunityIcons name="swap-vertical" size={20} color="black" />
+          <Text style={{ marginLeft: 6, }}>Price:Lowest to high </Text>
+
+        </Pressable>
+      </View >
+
+
 
       <View style={styles.saleContainer}>
         <View style={styles.sectionContainer}>
@@ -249,10 +283,14 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     backgroundColor: 'white',
-    height: 65,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
+    width: 375,
+    height: 140,
+    position: 'absolute',
+    left: 0,
+    top: -2,
   },
   searchInputContainer: {
     flexDirection: 'row',
@@ -272,7 +310,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   notificationIcon: {
-    margin: 5,
+    // margin: 5,
+    position: 'absolute',
+    left: 340,
+    top: 30,
+    marginLeft: 20,
+    marginTop: 0,
   },
   chatIcon: {
     marginHorizontal: 10,
@@ -282,7 +325,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   categoryTitle: {
-    fontSize: 40,
+    fontSize: 34,
     color: 'black',
     fontWeight: '700',
     paddingBottom: 10,
@@ -292,7 +335,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#0A8ED9',
     marginLeft: 10,
     //borderWidth: 1,
-    height: 40,
+    width: 100,
+    height: 30,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center'
@@ -314,7 +358,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionTitle: {
-    fontSize: 25,
+    fontSize: 34,
     color: 'black',
     fontWeight: '500',
   },
@@ -337,6 +381,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#000',
   },
+
+
 });
 
 export default Home;

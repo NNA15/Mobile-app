@@ -1,95 +1,88 @@
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 import React from 'react';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
-const CartItem = ({ item, onRemoveItem, onAddWishlist }) => {
+
+const CartItem = ({ item, onCheckItem, addQuantity, reduceQuantity, onRemoveItem }) => {
     return (
-        <TouchableOpacity
-            style={{
-                borderRadius: 20,
-                elevation: 5,
-                width: "94%",
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginLeft: 10,
-                backgroundColor: '#fff',
-                marginBottom: 10,
-            }}>
-            <View style={{ width: '100%' }}>
+        <View style={styles.container}>
+            <View style={styles.wrapperImageCheck}>
+                <TouchableOpacity style={styles.button} onPress={onCheckItem}>
+                    <Text style={styles.iconPlus}>{item.selected ? "V " : ""}</Text>
+                </TouchableOpacity>
                 <Image
-                    source={item.image}
-                    style={{
-                        width: '100%',
-                        height: 120,
-                        borderTopLeftRadius: 20,
-                        borderTopRightRadius: 20,
-                    }}
+                    source={
+                        item.image
+                    }
+                    style={styles.productImage}
                 />
+            </View>
 
-                <Text
-                    style={{
-                        marginTop: 10,
-                        marginLeft: 10,
-                        fontSize: 18,
-                        fontWeight: '600',
-                    }}>
-                    {item.name}
-                </Text>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: 10,
-                    }}>
-                    <Text
-                        style={{
-                            marginTop: 5,
-                            marginLeft: 10,
-                            fontSize: 18,
-                            fontWeight: '600',
-                            marginBottom: 10,
-                        }}>
-                        {'रु ' + item.price}
-                    </Text>
+            <View style={{ justifyContent: 'space-between' }}>
+                <View>
+                    <Text>{item.name}</Text>
+                    <Text>{'đ' + item.price}</Text>
+                </View>
+
+                <View style={styles.wrapperCardBottom}>
+                    <TouchableOpacity style={styles.button} onPress={reduceQuantity}>
+                        <Text style={{ color: 'black', fontWeight: '600' }}>-</Text>
+                    </TouchableOpacity>
+                    <Text style={{ paddingHorizontal: 12 }}>{item.quantity}</Text>
+                    <TouchableOpacity style={[styles.button, { borderColor: 'green' }]} onPress={addQuantity}>
+                        <Text style={styles.iconPlus}>+</Text>
+                    </TouchableOpacity>
+
                     <TouchableOpacity
                         style={{
-                            borderWidth: 0.5,
+                            borderWidth: 0,
                             padding: 5,
                             justifyContent: 'center',
                             alignItems: 'center',
                             borderRadius: 10,
-                            marginRight: 15,
+                            marginRight: 5,
+                            marginLeft: 100,
                         }}
                         onPress={() => {
                             onRemoveItem();
                         }}>
-                        <Text style={{ color: '#000' }}>Remove Item</Text>
+                        <AntDesign name="delete" size={20} color="black" />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                    style={{
-                        width: 40,
-                        elevation: 5,
-                        height: 40,
-                        backgroundColor: '#fff',
-                        borderRadius: 20,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        top: 10,
-                        right: 10,
-                    }}
-                    onPress={() => {
-                        onAddWishlist(item);
-                    }}>
-                    <Image
-                        source={require('../images/heart.png')}
-                        style={{ width: 24, height: 24 }}
-                    />
-                </TouchableOpacity>
             </View>
-        </TouchableOpacity>
+        </View>
     );
 };
-
 export default CartItem;
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        marginBottom: 20,
+    },
+    wrapperImageCheck: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    productImage: {
+        width: 120,
+        height: 100,
+        marginHorizontal: 10,
+    },
+    button: {
+        borderWidth: 0.5,
+        borderRadius: 4,
+        width: 25,
+        height: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    iconPlus: {
+        color: 'black',
+        fontWeight: '600',
+    },
+    wrapperCardBottom: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+});

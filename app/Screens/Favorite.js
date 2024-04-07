@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList } from 'react-native';
-import CartItem from '../Components/CartItem';
+import FavoriteItem from '../Components/FavoriteItem';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, removeFromWishlist } from '../redux/actions/Actions';
+import { removeFromWishlist, addItemToCart } from '../redux/actions/Actions';
+
 
 const Favorite = () => {
-  const [cartList, setCartList] = useState([]);
-  const cartData = useSelector(state => state.Reducers);
+  const [favoriteList, setfavoriteList] = useState([]);
+  const favoriteData = useSelector(state => state.Reducers2);
   const dispatch = useDispatch();
 
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={cartData}
+        data={favoriteData}
         renderItem={({ item, index }) => {
-          return <CartItem item={item}
-            onRemoveItem={() => {
-              dispatch(removeFromWishlist(index));
-            }} />;
+          return <FavoriteItem item={item}
+            onRemoveItem={() => { dispatch(removeFromWishlist(index)); }}
+            addToCartFromFavorite={x => { dispatch(addItemToCart(item)) }}
+          />;
         }}
       />
     </View>
