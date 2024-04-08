@@ -1,11 +1,40 @@
-import {View, Text, TouchableOpacity, Image, Dimensions} from 'react-native';
-import React from 'react';
-import {TextInput} from 'react-native-gesture-handler';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  Alert,
+} from 'react-native';
+import React, {useState} from 'react';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigation = useNavigation();
+  const handleLogin = () => {
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    axios
+      .post('http://192.168.1.122:8000/login', user)
+      .then(response => {
+        console.log(response);
+        const token = response.data.token;
+        AsyncStorage.setItem('authToken', token);
+        navigation.navigate('TabNavigation');
+      })
+      .catch(error => {
+        Alert.alert('Login Error', 'Invalid Email');
+        console.log(error);
+      });
+  };
   return (
     <View>
       <View
@@ -26,25 +55,28 @@ const Login = () => {
             Welcome,
           </Text>
           <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Signup');
-          }}
-          >
-          <Text style={{fontSize: 14, color: '#0A8ED9', fontWeight: 500}}>
-            Sign Up
-          </Text>
+            onPress={() => {
+              navigation.navigate('Signup');
+            }}>
+            <Text style={{fontSize: 14, color: '#0A8ED9', fontWeight: 500}}>
+              Sign Up
+            </Text>
           </TouchableOpacity>
         </View>
         <Text>Sign in to Continue</Text>
         <View style={{marginVertical: 50}}>
           <Text style={{fontSize: 20, fontWeight: 500}}>Email</Text>
           <CustomInput
+            value={email}
+            onChangeText={text => setEmail(text)}
             placeholder={'Enter Email'}
             icon={require('../images/mail.png')}></CustomInput>
         </View>
         <View>
           <Text style={{fontSize: 20, fontWeight: 500}}>Password</Text>
           <CustomInput
+            value={password}
+            onChangeText={text => setPassword(text)}
             placeholder={'Enter Password'}
             type={'password'}
             icon={require('../images/key.png')}></CustomInput>
@@ -57,7 +89,7 @@ const Login = () => {
               paddingTop: 10,
             }}
             onPress={() => {
-              navigation.navigate('ForgotPassword1')
+              navigation.navigate('ForgotPassword1');
             }}>
             <Text style={{fontSize: 14, color: 'black'}}>Forgot Password</Text>
           </TouchableOpacity>
@@ -67,9 +99,7 @@ const Login = () => {
             title={'SIGN IN'}
             bg={'#0A8ED9'}
             color={'white'}
-            onClick={() => {
-              navigation.navigate('TabNavigation')
-            }}></CustomButton>
+            onClick={handleLogin}></CustomButton>
         </View>
       </View>
 
@@ -97,8 +127,7 @@ const Login = () => {
             width: Dimensions.get('window').width - 40,
             height: 53,
           }}
-          onPress={() => {
-          }}>
+          onPress={() => {}}>
           <Image
             source={require('../images/mail.png')}
             style={{
