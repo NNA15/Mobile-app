@@ -6,10 +6,10 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = () => {
@@ -23,7 +23,7 @@ const Login = () => {
     };
 
     axios
-      .post('http://192.168.1.122:8000/login', user)
+      .post('http://192.168.43.1:8000/login', user)
       .then(response => {
         console.log(response);
         const token = response.data.token;
@@ -51,21 +51,21 @@ const Login = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 30, color: 'black', fontWeight: 700}}>
+          <Text style={{ fontSize: 30, color: 'black', fontWeight: 700 }}>
             Welcome,
           </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Signup');
             }}>
-            <Text style={{fontSize: 14, color: '#0A8ED9', fontWeight: 500}}>
+            <Text style={{ fontSize: 14, color: '#0A8ED9', fontWeight: 500 }}>
               Sign Up
             </Text>
           </TouchableOpacity>
         </View>
         <Text>Sign in to Continue</Text>
-        <View style={{marginVertical: 50}}>
-          <Text style={{fontSize: 20, fontWeight: 500}}>Email</Text>
+        <View style={{ marginVertical: 50 }}>
+          <Text style={{ fontSize: 20, fontWeight: 500 }}>Email</Text>
           <CustomInput
             value={email}
             onChangeText={text => setEmail(text)}
@@ -73,7 +73,7 @@ const Login = () => {
             icon={require('../images/mail.png')}></CustomInput>
         </View>
         <View>
-          <Text style={{fontSize: 20, fontWeight: 500}}>Password</Text>
+          <Text style={{ fontSize: 20, fontWeight: 500 }}>Password</Text>
           <CustomInput
             value={password}
             onChangeText={text => setPassword(text)}
@@ -91,7 +91,7 @@ const Login = () => {
             onPress={() => {
               navigation.navigate('ForgotPassword1');
             }}>
-            <Text style={{fontSize: 14, color: 'black'}}>Forgot Password</Text>
+            <Text style={{ fontSize: 14, color: 'black' }}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
         <View>
@@ -103,7 +103,7 @@ const Login = () => {
         </View>
       </View>
 
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <Text
           style={{
             fontSize: 20,
@@ -114,7 +114,7 @@ const Login = () => {
         </Text>
       </View>
 
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <TouchableOpacity
           style={{
             borderRadius: 5,
@@ -127,7 +127,7 @@ const Login = () => {
             width: Dimensions.get('window').width - 40,
             height: 53,
           }}
-          onPress={() => {}}>
+          onPress={() => { }}>
           <Image
             source={require('../images/mail.png')}
             style={{
@@ -136,7 +136,7 @@ const Login = () => {
               marginRight: 30,
             }}
           />
-          <Text style={{color: 'black', fontWeight: 500, fontSize: 18}}>
+          <Text style={{ color: 'black', fontWeight: 500, fontSize: 18 }}>
             SIGN IN
           </Text>
         </TouchableOpacity>

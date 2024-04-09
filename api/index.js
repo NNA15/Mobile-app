@@ -8,9 +8,9 @@ const app = express();
 const port = 8000;
 const cors = require('cors');
 
-app.use(cors({origin: true, credentials: true}));
+app.use(cors({ origin: true, credentials: true }));
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 const jwt = require('jsonwebtoken');
@@ -49,7 +49,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
     from: 'nhatnguyenb25@gmail.com',
     to: email,
     subject: 'Email Verification',
-    text: `Please click the following link to verify your email: http://192.168.1.122:8000/verify/${verificationToken}`,
+    text: `Please click the following link to verify your email: http://192.168.43.1:8000/verify/${verificationToken}`,
   };
 
   // Send the email
@@ -65,17 +65,17 @@ const sendVerificationEmail = async (email, verificationToken) => {
 
 app.post('/register', async (req, res) => {
   try {
-    const {name, email, password} = req.body;
+    const { name, email, password } = req.body;
 
     // Check if the email is already registered
-    const existingUser = await User.findOne({email});
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       console.log('Email already registered:', email); // Debugging statement
-      return res.status(400).json({message: 'Email already registered'});
+      return res.status(400).json({ message: 'Email already registered' });
     }
 
     // Create a new user
-    const newUser = new User({name, email, password});
+    const newUser = new User({ name, email, password });
 
     // Generate and store the verification token
     newUser.verificationToken = crypto.randomBytes(20).toString('hex');
@@ -96,7 +96,7 @@ app.post('/register', async (req, res) => {
     });
   } catch (error) {
     console.log('Error during registration:', error); // Debugging statement
-    res.status(500).json({message: 'Registration failed'});
+    res.status(500).json({ message: 'Registration failed' });
   }
 });
 
@@ -106,9 +106,9 @@ app.get('/verify/:token', async (req, res) => {
     const token = req.params.token;
 
     //Find the user witht the given verification token
-    const user = await User.findOne({verificationToken: token});
+    const user = await User.findOne({ verificationToken: token });
     if (!user) {
-      return res.status(404).json({message: 'Invalid verification token'});
+      return res.status(404).json({ message: 'Invalid verification token' });
     }
 
     //Mark the user as verified
@@ -117,9 +117,9 @@ app.get('/verify/:token', async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({message: 'Email verified successfully'});
+    res.status(200).json({ message: 'Email verified successfully' });
   } catch (error) {
-    res.status(500).json({message: 'Email Verificatioion Failed'});
+    res.status(500).json({ message: 'Email Verificatioion Failed' });
   }
 });
 
@@ -134,24 +134,24 @@ const secretKey = generateSecretKey();
 //endpoint to login the user!
 app.post('/login', async (req, res) => {
   try {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     //check if the user exists
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({message: 'Invalid email or password'});
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     //check if the password is correct
     if (user.password !== password) {
-      return res.status(401).json({message: 'Invalid password'});
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
     //generate a token
-    const token = jwt.sign({userId: user._id}, secretKey);
+    const token = jwt.sign({ userId: user._id }, secretKey);
 
-    res.status(200).json({token});
+    res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({message: 'Login Failed'});
+    res.status(500).json({ message: 'Login Failed' });
   }
 });

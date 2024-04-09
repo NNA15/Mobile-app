@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,25 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {product} from '../Products';
+import { product } from '../Products';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import ProductItem from '../Components/ProductItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemToCart, addToWishlist } from '../redux/actions/Actions';
 
 const Home = () => {
+
+  const dispatch = useDispatch();
   const [categoryList, setCategoryList] = useState([]);
   const [tshirtList, setTshirtList] = useState([]);
+  const [jeansList, setjeansList] = useState([]);
+  const [shoeList, setshoeList] = useState([]);
+  const [jacketList, setjacketList] = useState([]);
+  const [slipperList, setslipperList] = useState([]);
+  const [trouserList, settrouserList] = useState([]);
+
 
   useEffect(() => {
     let tempCategory = [];
@@ -24,12 +36,18 @@ const Home = () => {
     });
     setCategoryList(tempCategory);
     setTshirtList(product.category[0].data);
+    setjeansList(product.category[1].data);
+    setshoeList(product.category[2].data);
+    setjacketList(product.category[3].data);
+    setslipperList(product.category[4].data);
+    settrouserList(product.category[5].data);
   }, []);
-
+  const items = useSelector(state => state);
+  console.log(items);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.searchContainer}>
-        <Pressable style={styles.searchInputContainer}>
+        {/* <Pressable style={styles.searchInputContainer}>
           <Icon
             style={styles.searchIcon}
             name="search-outline"
@@ -39,34 +57,66 @@ const Home = () => {
             placeholder="Search"
             placeholderTextColor={'#0A8ED9'}
             style={styles.searchInput}></TextInput>
-        </Pressable>
+        </Pressable> */}
         <TouchableOpacity style={styles.notificationIcon}>
-          <Icon name="notifications-outline" size={26} color={'#0A8ED9'} />
+          <Icon name="search-outline" size={20} color={'#000'} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.chatIcon}>
+        {/* <TouchableOpacity style={styles.chatIcon}>
           <Icon
             name="chatbubble-ellipses-outline"
             size={26}
             color={'#0A8ED9'}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View style={styles.categoryContainer}>
-        <Text style={styles.categoryTitle}>Categories</Text>
+        <Text style={styles.categoryTitle}>Favorites</Text>
         <FlatList
           data={categoryList}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({item, index}) => {
+          contentContainerStyle={{ flexGrow: 1 }}
+          renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity style={styles.categoryItem}>
+              <TouchableOpacity style={[styles.categoryItem, { flexDirection: 'row', flex: 1 }]}>
                 <Text style={styles.categoryText}>{item.category}</Text>
               </TouchableOpacity>
             );
           }}
         />
       </View>
+
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+        <Pressable
+          style={{
+            flexDirection: "row",
+            alignItems: "left",
+            padding: 0,
+            width: 125,
+            justifyContent: "left",
+          }}
+        >
+          <Ionicons name="filter-sharp" size={20} color="black" />
+          <Text style={{ marginLeft: 6 }}>Filter</Text>
+        </Pressable>
+
+        <Pressable
+          style={{
+            flexDirection: "row",
+            alignItems: "right",
+            padding: 0,
+            justifyContent: "right",
+            width: 200
+          }}
+        >
+          <MaterialCommunityIcons name="swap-vertical" size={20} color="black" />
+          <Text style={{ marginLeft: 6, }}>Price:Lowest to high </Text>
+
+        </Pressable>
+      </View >
+
+
 
       <View style={styles.saleContainer}>
         <View style={styles.sectionContainer}>
@@ -83,8 +133,18 @@ const Home = () => {
           data={tshirtList}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({item, index}) => {
-            return <ProductItem item={item}></ProductItem>;
+          renderItem={({ item, index }) => {
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
           }}
         />
       </View>
@@ -92,7 +152,7 @@ const Home = () => {
       <View style={styles.newContainer}>
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>New</Text>
+            <Text style={styles.sectionTitle}>New Slippers</Text>
             <View style={styles.spacer} />
             <TouchableOpacity>
               <Text style={styles.viewAllText}>View All</Text>
@@ -101,14 +161,118 @@ const Home = () => {
           <Text style={styles.sectionDescription}>You've seen it before!</Text>
         </View>
         <FlatList
-          data={tshirtList}
+          data={slipperList}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({item, index}) => {
-            return <ProductItem item={item}></ProductItem>;
+          renderItem={({ item, index }) => {
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
           }}
         />
       </View>
+
+      <View style={styles.newContainer}>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Shoe</Text>
+            <View style={styles.spacer} />
+            <TouchableOpacity>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.sectionDescription}>You've seen it before!</Text>
+        </View>
+        <FlatList
+          data={shoeList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
+          }}
+        />
+      </View>
+
+      <View style={styles.newContainer}>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Jacket</Text>
+            <View style={styles.spacer} />
+            <TouchableOpacity>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.sectionDescription}>You've seen it before!</Text>
+        </View>
+        <FlatList
+          data={jacketList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
+          }}
+        />
+      </View>
+
+      <View style={styles.newContainer}>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Trousers</Text>
+            <View style={styles.spacer} />
+            <TouchableOpacity>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.sectionDescription}>You've seen it before!</Text>
+        </View>
+        <FlatList
+          data={trouserList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
+          }}
+        />
+      </View>
+
     </ScrollView>
   );
 };
@@ -119,10 +283,14 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     backgroundColor: 'white',
-    height: 65,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
+    width: 375,
+    height: 140,
+    position: 'absolute',
+    left: 0,
+    top: -2,
   },
   searchInputContainer: {
     flexDirection: 'row',
@@ -142,7 +310,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   notificationIcon: {
-    margin: 5,
+    // margin: 5,
+    position: 'absolute',
+    left: 340,
+    top: 30,
+    marginLeft: 20,
+    marginTop: 0,
   },
   chatIcon: {
     marginHorizontal: 10,
@@ -152,7 +325,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   categoryTitle: {
-    fontSize: 30,
+    fontSize: 34,
     color: 'black',
     fontWeight: '700',
     paddingBottom: 10,
@@ -161,15 +334,17 @@ const styles = StyleSheet.create({
   categoryItem: {
     backgroundColor: '#0A8ED9',
     marginLeft: 10,
+    //borderWidth: 1,
     width: 100,
     height: 30,
-    borderRadius: 15,
+    borderRadius: 20,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   categoryText: {
     textAlign: 'center',
     color: 'white',
+    marginLeft: 10, marginRight: 10
   },
   saleContainer: {
     marginTop: 15,
@@ -183,9 +358,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionTitle: {
-    fontSize: 30,
+    fontSize: 34,
     color: 'black',
-    fontWeight: '700',
+    fontWeight: '500',
   },
   spacer: {
     flex: 1,
@@ -200,9 +375,14 @@ const styles = StyleSheet.create({
     color: '#9B9B9B',
   },
   newContainer: {
-    marginTop: 15,
-    paddingLeft: 20,
+    marginTop: 20,
+    fontSize: 18,
+    marginLeft: 20,
+    fontWeight: '600',
+    color: '#000',
   },
+
+
 });
 
 export default Home;

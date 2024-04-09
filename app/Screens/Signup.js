@@ -1,8 +1,8 @@
-import {View, Text, TouchableOpacity, Image, Alert} from 'react-native';
-import React, {useState} from 'react';
+import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
 import CustomButton from '../Components/CustomButton';
 import CustomInput from '../Components/CustomInput';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
 const Signup = () => {
@@ -17,7 +17,7 @@ const Signup = () => {
       password: password,
     };
     axios
-      .post('http://192.168.1.122:8000/register', user)
+      .post('http://192.168.43.1:8000/register', user)
       .then(response => {
         console.log(response);
         Alert.alert(
@@ -66,13 +66,13 @@ const Signup = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 30, color: 'black', fontWeight: 700}}>
+          <Text style={{ fontSize: 30, color: 'black', fontWeight: 700 }}>
             Welcome,
           </Text>
         </View>
         <Text>Sign up to Continue</Text>
-        <View style={{marginVertical: 25}}>
-          <Text style={{fontSize: 20, fontWeight: 500}}>Name</Text>
+        <View style={{ marginVertical: 25 }}>
+          <Text style={{ fontSize: 20, fontWeight: 500 }}>Name</Text>
           <CustomInput
             value={name}
             onChangeText={text => setName(text)}
@@ -80,15 +80,15 @@ const Signup = () => {
             icon={require('../images/user.png')}></CustomInput>
         </View>
         <View>
-          <Text style={{fontSize: 20, fontWeight: 500}}>Email</Text>
+          <Text style={{ fontSize: 20, fontWeight: 500 }}>Email</Text>
           <CustomInput
             value={email}
             onChangeText={text => setEmail(text)}
             placeholder={'Enter Email'}
             icon={require('../images/mail.png')}></CustomInput>
         </View>
-        <View style={{marginVertical: 25}}>
-          <Text style={{fontSize: 20, fontWeight: 500}}>Password</Text>
+        <View style={{ marginVertical: 25 }}>
+          <Text style={{ fontSize: 20, fontWeight: 500 }}>Password</Text>
           <CustomInput
             value={password}
             onChangeText={text => setPassword(text)}
