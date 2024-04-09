@@ -15,6 +15,8 @@ const CustomInput = ({value, onChangeText, placeholder, icon, type}) => {
       }}>
       <Image source={icon} style={{width: 24, height: 24}}></Image>
       <TextInput
+        value={value}
+        onChangeText={onChangeText}
         placeholder={placeholder}
         secureTextEntry={type == 'password' ? true : false}
         style={{marginLeft: 10, fontSize: 14}}></TextInput>
