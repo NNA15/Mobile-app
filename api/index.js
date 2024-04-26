@@ -4,9 +4,13 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
+const productRoutes = require('./product.js');
+
 const app = express();
 const port = 8000;
 const cors = require('cors');
+
+app.use('/product', productRoutes);
 
 app.use(cors({ origin: true, credentials: true }));
 
@@ -49,7 +53,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
     from: 'nhatnguyenb25@gmail.com',
     to: email,
     subject: 'Email Verification',
-    text: `Please click the following link to verify your email: http://192.168.43.1:8000/verify/${verificationToken}`,
+    text: `Please click the following link to verify your email: http://192.168.1.122:8000/verify/${verificationToken}`,
   };
 
   // Send the email

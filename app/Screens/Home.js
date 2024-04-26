@@ -9,17 +9,18 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { product } from '../Products';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import ProductItem from '../Components/ProductItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, addToWishlist } from '../redux/actions/Actions';
+import axios from 'axios';
 
 const Home = () => {
 
   const dispatch = useDispatch();
+  const [product, setProduct] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [tshirtList, setTshirtList] = useState([]);
   const [jeansList, setjeansList] = useState([]);
@@ -30,18 +31,41 @@ const Home = () => {
 
 
   useEffect(() => {
+    fetchData();
     let tempCategory = [];
-    product.category.map(item => {
+    product.map(item => {
       tempCategory.push(item);
-    });
-    setCategoryList(tempCategory);
-    setTshirtList(product.category[0].data);
-    setjeansList(product.category[1].data);
-    setshoeList(product.category[2].data);
-    setjacketList(product.category[3].data);
-    setslipperList(product.category[4].data);
-    settrouserList(product.category[5].data);
+    })
+    console.log(tempCategory);
+    console.log(tshirtList);
   }, []);
+
+  const fetchData = async() => {
+    try {
+    const respose = await axios.get('http://192.168.1.122:8000/product');
+    const fetchProducts = respose.data;
+    if(fetchProducts) {
+    setProduct(fetchProducts);
+
+    const categories = Array.from(new Set(fetchProducts.map(product => product.cateogry)));
+    const categorizedProducts = {};
+      categories.forEach(category => {
+        setCategoryList(category);
+        categorizedProducts[category] = fetchProducts.filter(product => product.category === category);
+      });
+
+      setTshirtList(categorizedProducts['T-shirt'] || []);
+      setjeansList(categorizedProducts['Jeans'] || []);
+      setjacketList(categorizedProducts['Jacket'] || []);
+      setshoeList(categorizedProducts['Shoe'] || []);
+      setslipperList(categorizedProducts['Slipper'] || []);
+      settrouserList(categorizedProducts['Trouser'] || []);
+    }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   const items = useSelector(state => state);
   console.log(items);
   return (
