@@ -8,11 +8,13 @@ const CartItem = ({ item, onCheckItem, addQuantity, reduceQuantity, onRemoveItem
         <View style={styles.container}>
             <View style={styles.wrapperImageCheck}>
                 <TouchableOpacity style={styles.button} onPress={onCheckItem}>
-                    <Text style={styles.iconPlus}>{item.selected ? "V " : ""}</Text>
+                    <Text style={styles.iconPlus}>{item.selected ? "✔️" : ""}</Text>
                 </TouchableOpacity>
                 <Image
-                    source={
-                        item.image
+                    source={{
+                        uri:
+                            item.image
+                    }
                     }
                     style={styles.productImage}
                 />

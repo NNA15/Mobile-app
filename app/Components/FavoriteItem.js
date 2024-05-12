@@ -8,9 +8,10 @@ const FavoriteItem = ({ item, onRemoveItem, addToCartFromFavorite }) => {
         <View style={styles.container}>
             <View style={styles.wrapperImageCheck}>
                 <Image
-                    source={
-                        item.image
-                    }
+                    source={{
+                        uri:
+                            item.image
+                    }}
                     style={styles.productImage}
                 />
             </View>

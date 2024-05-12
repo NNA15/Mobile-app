@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -29,6 +29,89 @@ const Home = () => {
   const [slipperList, setslipperList] = useState([]);
   const [trouserList, settrouserList] = useState([]);
 
+  const [filteredTshirtList, setFilteredTshirtList] = useState([]);
+  const [filteredJeansList, setFilteredJeansList] = useState([]);
+  const [filteredShoeList, setFilteredShoeList] = useState([]);
+  const [filteredJacketList, setFilteredJacketList] = useState([]);
+  const [filteredSlipperList, setFilteredSlipperList] = useState([]);
+  const [filteredTrouserList, setFilteredTrouserList] = useState([]);
+
+  const [searchText, setSearchText] = useState('');
+
+  // lưu giá trị khi nhập vào ô search
+  const handleSearchInputChange = (text) => {
+    setSearchText(text); // Lưu giá trị của TextInput vào state
+  };
+
+  // Hàm xử lý search , lưu các danh sách tìm kiếm được vào danh sách mới.
+  const handleSearch = () => {
+    const defaultScrollPosition = 0;
+    const tshirtListPosition = 50;
+    const jeansListPosition = 300;
+    const shoeListPosition = 600;
+    const jacketListPosition = 900;
+    const slipperListPosition = 1200;
+    const trouserListPosition = 1500;
+
+    console.log('Searching for:', searchText);
+
+    const filteredTshirtList = tshirtList.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
+    console.log('Filtered Tshirt List:', filteredTshirtList);
+    setFilteredTshirtList(filteredTshirtList);
+
+    const filteredJacketList = jacketList.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
+    console.log('Filtered Jacket List:', filteredJacketList);
+    setFilteredJacketList(filteredJacketList);
+
+    const filteredJeansList = jeansList.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
+    console.log('Filtered Jeans List:', filteredJeansList);
+    setFilteredJeansList(filteredJeansList);
+
+    const filteredShoeList = shoeList.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
+    console.log('Filtered Shoe List:', filteredShoeList);
+    setFilteredShoeList(filteredShoeList);
+
+    const filteredSlipperList = slipperList.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
+    console.log('Filtered Slippers List:', filteredSlipperList);
+    setFilteredSlipperList(filteredSlipperList);
+
+    const filteredTrouserList = trouserList.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
+    console.log('Filtered Trousers List:', filteredTrouserList);
+    setFilteredTrouserList(filteredTrouserList);
+    if (searchText.trim() === '') {
+      // Nếu searchText rỗng, cuộn đến vị trí mặc định
+      scrollViewRef.current.scrollTo({ y: defaultScrollPosition, animated: true });
+    } else {
+      if (filteredTshirtList.length > 0) {
+        // You might need to adjust the yOffset according to your UI
+        scrollViewRef.current.scrollTo({ y: tshirtListPosition, animated: true });
+      } else if (filteredJacketList.length > 0) {
+        scrollViewRef.current.scrollTo({ y: jacketListPosition, animated: true });
+      } else if (filteredJeansList.length > 0) {
+        scrollViewRef.current.scrollTo({ y: jeansListPosition, animated: true });
+      } else if (filteredShoeList.length > 0) {
+        scrollViewRef.current.scrollTo({ y: shoeListPosition, animated: true });
+      } else if (filteredSlipperList.length > 0) {
+        scrollViewRef.current.scrollTo({ y: slipperListPosition, animated: true });
+      } else if (filteredTrouserList.length > 0) {
+        scrollViewRef.current.scrollTo({ y: trouserListPosition, animated: true });
+      }
+    }
+  };
+
+  const handleCategoryPress = (category) => {
+    const ITEM_HEIGHT = 250;
+    // Xác định vị trí của danh mục trong danh sách categoryList
+    const categoryIndex = categoryList.findIndex((item) => item.category === category);
+
+    // Xác định vị trí cuộn để đến danh mục này, có thể cần điều chỉnh tùy thuộc vào giao diện của bạn
+    const scrollPosition = categoryIndex * ITEM_HEIGHT; // Thay ITEM_HEIGHT bằng chiều cao của mỗi mục trong danh sách
+
+    // Cuộn xuống vị trí tương ứng
+    scrollViewRef.current.scrollTo({ y: scrollPosition, animated: true });
+  };
+
+  const scrollViewRef = useRef();
 
   useEffect(() => {
     fetchData();
@@ -38,6 +121,7 @@ const Home = () => {
     })
     console.log(tempCategory);
     console.log(tshirtList);
+    console.log("category:", categoryList);
   }, []);
 
   const fetchData = async () => {
@@ -69,9 +153,9 @@ const Home = () => {
   const items = useSelector(state => state);
   console.log(items);
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView ref={scrollViewRef} style={styles.container}>
       <View style={styles.searchContainer}>
-        {/* <Pressable style={styles.searchInputContainer}>
+        <Pressable style={styles.searchInputContainer}>
           <Icon
             style={styles.searchIcon}
             name="search-outline"
@@ -80,18 +164,20 @@ const Home = () => {
           <TextInput
             placeholder="Search"
             placeholderTextColor={'#0A8ED9'}
-            style={styles.searchInput}></TextInput>
-        </Pressable> */}
-        <TouchableOpacity style={styles.notificationIcon}>
-          <Icon name="search-outline" size={20} color={'#000'} />
-        </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.chatIcon}>
+            style={styles.searchInput}
+            onChangeText={handleSearchInputChange} // Gọi hàm này mỗi khi TextInput thay đổi
+            onSubmitEditing={handleSearch}
+            value={searchText} // Đặt giá trị của TextInput thành giá trị của state
+
+          />
+        </Pressable>
+        <TouchableOpacity style={styles.chatIcon}>
           <Icon
             name="chatbubble-ellipses-outline"
             size={26}
             color={'#0A8ED9'}
           />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
 
       <View style={styles.categoryContainer}>
@@ -103,7 +189,7 @@ const Home = () => {
           contentContainerStyle={{ flexGrow: 1 }}
           renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity style={[styles.categoryItem, { flexDirection: 'row', flex: 1 }]}>
+              <TouchableOpacity onPress={() => handleCategoryPress(item.category)} style={[styles.categoryItem, { flexDirection: 'row', flex: 1 }]}>
                 <Text style={styles.categoryText}>{item.category}</Text>
               </TouchableOpacity>
             );
@@ -111,41 +197,10 @@ const Home = () => {
         />
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-        <Pressable
-          style={{
-            flexDirection: "row",
-            alignItems: "left",
-            padding: 0,
-            width: 125,
-            justifyContent: "left",
-          }}
-        >
-          <Ionicons name="filter-sharp" size={20} color="black" />
-          <Text style={{ marginLeft: 6 }}>Filter</Text>
-        </Pressable>
-
-        <Pressable
-          style={{
-            flexDirection: "row",
-            alignItems: "right",
-            padding: 0,
-            justifyContent: "right",
-            width: 200
-          }}
-        >
-          <MaterialCommunityIcons name="swap-vertical" size={20} color="black" />
-          <Text style={{ marginLeft: 6, }}>Price:Lowest to high </Text>
-
-        </Pressable>
-      </View >
-
-
-
       <View style={styles.saleContainer}>
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Sale</Text>
+            <Text style={styles.sectionTitle}>New T-shirt</Text>
             <View style={styles.spacer} />
             <TouchableOpacity>
               <Text style={styles.viewAllText}>View All</Text>
@@ -154,7 +209,7 @@ const Home = () => {
           <Text style={styles.sectionDescription}>Super summer sale</Text>
         </View>
         <FlatList
-          data={tshirtList}
+          data={filteredTshirtList.length > 0 ? filteredTshirtList : tshirtList}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
@@ -176,7 +231,7 @@ const Home = () => {
       <View style={styles.newContainer}>
         <View style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>New Slippers</Text>
+            <Text style={styles.sectionTitle}>New Jeans</Text>
             <View style={styles.spacer} />
             <TouchableOpacity>
               <Text style={styles.viewAllText}>View All</Text>
@@ -185,7 +240,7 @@ const Home = () => {
           <Text style={styles.sectionDescription}>You've seen it before!</Text>
         </View>
         <FlatList
-          data={slipperList}
+          data={filteredJeansList.length > 0 ? filteredJeansList : jeansList}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
@@ -216,7 +271,7 @@ const Home = () => {
           <Text style={styles.sectionDescription}>You've seen it before!</Text>
         </View>
         <FlatList
-          data={shoeList}
+          data={filteredShoeList.length > 0 ? filteredShoeList : shoeList}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
@@ -247,7 +302,38 @@ const Home = () => {
           <Text style={styles.sectionDescription}>You've seen it before!</Text>
         </View>
         <FlatList
-          data={jacketList}
+          data={filteredJacketList.length > 0 ? filteredJacketList : jacketList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return (
+              <ProductItem
+                item={item}
+                onAddWishlist={x => {
+                  dispatch(addToWishlist(x));
+                }}
+                onAddToCart={x => {
+                  dispatch(addItemToCart(item));
+                }}
+              />
+            );
+          }}
+        />
+      </View>
+
+      <View style={styles.newContainer}>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Slippers</Text>
+            <View style={styles.spacer} />
+            <TouchableOpacity>
+              <Text style={styles.viewAllText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.sectionDescription}>You've seen it before!</Text>
+        </View>
+        <FlatList
+          data={filteredSlipperList.length > 0 ? filteredSlipperList : slipperList}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
@@ -278,7 +364,7 @@ const Home = () => {
           <Text style={styles.sectionDescription}>You've seen it before!</Text>
         </View>
         <FlatList
-          data={trouserList}
+          data={filteredTrouserList.length > 0 ? filteredTrouserList : trouserList}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
@@ -297,6 +383,7 @@ const Home = () => {
         />
       </View>
 
+
     </ScrollView>
   );
 };
@@ -312,19 +399,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     width: 375,
     height: 140,
-    position: 'absolute',
     left: 0,
-    top: -2,
+    top: 0,
+    zIndex: 1,
   },
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#EEEEEE',
     flex: 1,
-    borderRadius: 5,
-    gap: 10,
+    borderRadius: 20,
+    gap: 15,
     height: 38,
-    margin: 10,
+    margin: 5,
     marginHorizontal: 15,
   },
   searchIcon: {
@@ -342,10 +429,15 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   chatIcon: {
+    margin: 5,
+    position: 'absolute',
+    left: 360,
+    top: 50,
+    marginLeft: 20,
     marginHorizontal: 10,
   },
   categoryContainer: {
-    marginTop: 25,
+    marginTop: -10,
     paddingBottom: 10,
   },
   categoryTitle: {
