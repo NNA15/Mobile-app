@@ -40,27 +40,27 @@ const Home = () => {
     console.log(tshirtList);
   }, []);
 
-  const fetchData = async() => {
+  const fetchData = async () => {
     try {
-    const respose = await axios.get('http://192.168.1.122:8000/product');
-    const fetchProducts = respose.data;
-    if(fetchProducts) {
-    setProduct(fetchProducts);
+      const respose = await axios.get('http://192.168.1.15:8000/product');
+      const fetchProducts = respose.data;
+      if (fetchProducts) {
+        setProduct(fetchProducts);
 
-    const categories = Array.from(new Set(fetchProducts.map(product => product.cateogry)));
-    const categorizedProducts = {};
-      categories.forEach(category => {
-        setCategoryList(category);
-        categorizedProducts[category] = fetchProducts.filter(product => product.category === category);
-      });
+        const categories = Array.from(new Set(fetchProducts.map(product => product.cateogry)));
+        const categorizedProducts = {};
+        categories.forEach(category => {
+          setCategoryList(category);
+          categorizedProducts[category] = fetchProducts.filter(product => product.category === category);
+        });
 
-      setTshirtList(categorizedProducts['T-shirt'] || []);
-      setjeansList(categorizedProducts['Jeans'] || []);
-      setjacketList(categorizedProducts['Jacket'] || []);
-      setshoeList(categorizedProducts['Shoe'] || []);
-      setslipperList(categorizedProducts['Slipper'] || []);
-      settrouserList(categorizedProducts['Trouser'] || []);
-    }
+        setTshirtList(categorizedProducts['T-shirt'] || []);
+        setjeansList(categorizedProducts['Jeans'] || []);
+        setjacketList(categorizedProducts['Jacket'] || []);
+        setshoeList(categorizedProducts['Shoe'] || []);
+        setslipperList(categorizedProducts['Slipper'] || []);
+        settrouserList(categorizedProducts['Trouser'] || []);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
