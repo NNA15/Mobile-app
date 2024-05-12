@@ -47,7 +47,7 @@ const Home = () => {
       if (fetchProducts) {
         setProduct(fetchProducts);
 
-        const categories = Array.from(new Set(fetchProducts.map(product => product.cateogry)));
+        const categories = Array.from(new Set(fetchProducts.map(product => product.category)));
         const categorizedProducts = {};
         categories.forEach(category => {
           setCategoryList(category);

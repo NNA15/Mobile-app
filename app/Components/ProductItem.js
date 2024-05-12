@@ -18,7 +18,7 @@ const ProductItem = ({ item, onAddWishlist, onAddToCart }) => {
       }}>
       <View style={{ width: '100%' }}>
         <Image
-          source={item.image}
+          source={{ uri: item.image }}
           style={{
             width: '100%',
             height: 120,
