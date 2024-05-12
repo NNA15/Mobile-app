@@ -10,6 +10,7 @@ import ForgotPassword1 from '../Screens/ForgotPassword1';
 import ForgotPassword2 from '../Screens/ForgotPassword2';
 import Home from '../Screens/Home';
 import TabNavigation from './TabNavigation';
+import ProductDetail from '../Screens/ProductDetail';
 
 const Stack = createStackNavigator();
 const AppNavigator = () => {
@@ -52,6 +53,12 @@ const AppNavigator = () => {
           name="TabNavigation"
           component={TabNavigation}
         />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ProductDetail"
+          component={ProductDetail}
+        />
+
         {/* <Stack.Screen
           options={{ headerShown: false }}
           name="MyAddress"

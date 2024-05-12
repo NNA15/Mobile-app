@@ -125,7 +125,7 @@ const Cart = () => {
       <View style={styles.footer}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity style={styles.button} onPress={handleSetlectedAllCart}>
-            <Text style={styles.iconPlus}>{selectedAll ? "V" : ""}</Text>
+            <Text style={styles.iconPlus}>{selectedAll ? "✔️" : ""}</Text>
           </TouchableOpacity>
           <Text style={[styles.textFooter, { marginRight: 10 }]}>
             Total Price

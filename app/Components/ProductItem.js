@@ -1,8 +1,14 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native';
 //import { Image } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 const ProductItem = ({ item, onAddWishlist, onAddToCart }) => {
+  const navigation = useNavigation();
+  const handlePress = () => {
+    navigation.navigate('ProductDetail', { item: item });
+  };
+
   return (
     <TouchableOpacity
       style={{
@@ -15,7 +21,9 @@ const ProductItem = ({ item, onAddWishlist, onAddToCart }) => {
         marginRight: 10,
         backgroundColor: '#fff',
         marginBottom: 10,
-      }}>
+      }}
+      onPress={handlePress}
+    >
       <View style={{ width: '100%' }}>
         <Image
           source={item.image}
