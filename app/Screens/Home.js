@@ -10,12 +10,14 @@ import {
   FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import ProductItem from '../Components/ProductItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, addToWishlist } from '../redux/actions/Actions';
 import axios from 'axios';
+import jwt_decode, { jwtDecode } from 'jwt-decode';
+import { decode } from 'base-64';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+global.atob = decode;
 
 const Home = () => {
 
@@ -114,19 +116,31 @@ const Home = () => {
   const scrollViewRef = useRef();
 
   useEffect(() => {
+    getUserId();
     fetchData();
     let tempCategory = [];
     product.map(item => {
       tempCategory.push(item);
     })
-    console.log(tempCategory);
-    console.log(tshirtList);
-    console.log("category:", categoryList);
   }, []);
 
+  const getUserId = async () => {
+    try {
+      const token = await AsyncStorage.getItem("authToken");
+      if (token !== null) {
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.userId;
+        await AsyncStorage.setItem('userId', userId);
+        console.log(userId);
+      }
+    } catch (error) {
+      console.error('Error decoding token or saving userId:', error);
+    }
+  };
+  
   const fetchData = async () => {
     try {
-      const respose = await axios.get('http://192.168.1.15:8000/product');
+      const respose = await axios.get('http://192.168.1.122:8000/product');
       const fetchProducts = respose.data;
       if (fetchProducts) {
         setProduct(fetchProducts);
@@ -150,8 +164,6 @@ const Home = () => {
     }
   };
 
-  const items = useSelector(state => state);
-  console.log(items);
   return (
     <ScrollView ref={scrollViewRef} style={styles.container}>
       <View style={styles.searchContainer}>

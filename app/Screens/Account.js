@@ -6,11 +6,8 @@ let name = '';
 const Account = () => {
   const navigation = useNavigation();
   useEffect(() => {
-    getData();
   }, []);
-  const getData = async () => {
-    name = await AsyncStorage.getItem('NAME');
-  };
+  
   return (
     <View style={{ flex: 1 }}>
       <View
