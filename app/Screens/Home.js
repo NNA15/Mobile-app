@@ -15,6 +15,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, addToWishlist } from '../redux/actions/Actions';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import jwt_decode, { jwtDecode } from 'jwt-decode';
+import { decode } from 'base-64';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+global.atob = decode;
+
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -41,8 +46,27 @@ const Home = () => {
   };
 
   useEffect(() => {
+    getUserId();
     fetchData();
+    let tempCategory = [];
+    product.map(item => {
+      tempCategory.push(item);
+    })
   }, []);
+
+  const getUserId = async () => {
+    try {
+      const token = await AsyncStorage.getItem("authToken");
+      if (token !== null) {
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.userId;
+        await AsyncStorage.setItem('userId', userId);
+        console.log(userId);
+      }
+    } catch (error) {
+      console.error('Error decoding token or saving userId:', error);
+    }
+  };
 
   const fetchData = async () => {
     try {
