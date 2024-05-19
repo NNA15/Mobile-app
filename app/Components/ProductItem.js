@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native';
-//import { Image } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
 const ProductItem = ({ item, onAddWishlist, onAddToCart }) => {
   const navigation = useNavigation();
+  const [isWishlist, setIsWishlist] = useState(false); // State để kiểm tra xem sản phẩm đã được thêm vào danh sách mong muốn chưa
+
   const handlePress = () => {
     navigation.navigate('ProductDetail', { item: item });
+  };
+
+  const handleWishlistPress = () => {
+    setIsWishlist(!isWishlist); // Khi người dùng nhấn vào heart, đảo ngược giá trị của isWishlist
+    if (!isWishlist) {
+      onAddWishlist(item); // Gọi hàm để thêm hoặc xóa sản phẩm khỏi danh sách mong muốn
+
+    }
   };
 
   return (
@@ -17,7 +26,6 @@ const ProductItem = ({ item, onAddWishlist, onAddToCart }) => {
         width: 200,
         justifyContent: 'center',
         alignItems: 'center',
-        //marginLeft: 10,
         marginRight: 10,
         backgroundColor: '#fff',
         marginBottom: 10,
@@ -89,12 +97,10 @@ const ProductItem = ({ item, onAddWishlist, onAddToCart }) => {
             top: 10,
             right: 10,
           }}
-          onPress={() => {
-            onAddWishlist(item);
-          }}
+          onPress={handleWishlistPress} // Sử dụng hàm mới đã được tạo
         >
           <Image
-            source={require('../images/heart.png')}
+            source={isWishlist ? require('../images/Redheart.png') : require('../images/heart.png')} // Sử dụng biến isWishlist để quyết định hiển thị hình ảnh tương ứng
             style={{ width: 24, height: 24 }}
           />
 

@@ -11,7 +11,10 @@ import ForgotPassword2 from '../Screens/ForgotPassword2';
 import Home from '../Screens/Home';
 import TabNavigation from './TabNavigation';
 import ProductDetail from '../Screens/ProductDetail';
-
+import MyAddress from '../Screens/MyAddress';
+import AddAddress from '../Screens/AddAddress';
+import ChangePassword from '../Screens/ChangePassword';
+import CategoryProductList from '../Screens/CategoryProductList';
 const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
@@ -59,16 +62,26 @@ const AppNavigator = () => {
           component={ProductDetail}
         />
 
-        {/* <Stack.Screen
+        <Stack.Screen
           options={{ headerShown: false }}
           name="MyAddress"
           component={MyAddress}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           options={{ headerShown: false }}
           name="AddAddress"
           component={AddAddress}
-        /> */}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ChangePassword"
+          component={ChangePassword}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="CategoryProductList"
+          component={CategoryProductList}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

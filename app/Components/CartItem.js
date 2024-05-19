@@ -30,7 +30,7 @@ const CartItem = ({ item, onCheckItem, addQuantity, reduceQuantity, onRemoveItem
                     <TouchableOpacity style={styles.button} onPress={reduceQuantity}>
                         <Text style={{ color: 'black', fontWeight: '600' }}>-</Text>
                     </TouchableOpacity>
-                    <Text style={{ paddingHorizontal: 12 }}>{item.quantity}</Text>
+                    <Text style={{ paddingHorizontal: 12 }}>{item.quantityorder}</Text>
                     <TouchableOpacity style={[styles.button, { borderColor: 'green' }]} onPress={addQuantity}>
                         <Text style={styles.iconPlus}>+</Text>
                     </TouchableOpacity>

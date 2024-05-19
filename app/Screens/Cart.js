@@ -10,28 +10,23 @@ const Cart = () => {
   const dispatch = useDispatch();
   const [selectedCart, setSelectedCar] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [selectedAll, setselectedAll] = useState(false);
+  const [selectedAll, setSelectedAll] = useState(false);
 
-  // hàm lọc ra các phần tử được chọn
   const handleFilterData = (data) => {
-    const filterData = data.filter(value => {
-      return value.selected
-    })
-    setSelectedCar(filterData)
-  }
+    const filterData = data.filter(value => value.selected);
+    setSelectedCar(filterData);
+  };
 
   useEffect(() => {
-    // Khởi tạo danh sách giỏ hàng khi cartData thay đổi
     setCartList(cartData);
   }, [cartData]);
 
-  // thêm dấu tích
   const handleCheckListCart = (item) => {
     const updatedCartList = cartList.map(data => {
       if (data.name === item.name) {
         return {
           ...data,
-          selected: !data.selected
+          selected: !data.selected,
         };
       } else {
         return data;
@@ -41,35 +36,27 @@ const Cart = () => {
     handleFilterData(updatedCartList);
   };
 
-  // tính tổng số tiền mua hàng
   const handleCalculateTotalPrice = () => {
-    const calculatePrice = selectedCart.reduce((acc, val) => acc + val.price * val.quantity, 0,);
+    const calculatePrice = selectedCart.reduce((acc, val) => acc + val.price * val.quantityorder, 0);
     setTotalPrice(calculatePrice);
-  }
+  };
 
-  // chọn tất cả sản phẩm
-  const handleSetlectedAllCart = () => {
+  const handleSelectedAllCart = () => {
     const filterCart = cartList.map(data => {
-      if (selectedAll) {
-        return {
-          ...data,
-          selected: false
-        }
-      } else {
-        return {
-          ...data,
-          selected: true
-        }
-      }
+      return {
+        ...data,
+        selected: !selectedAll,
+      };
     });
     setCartList(filterCart);
     handleFilterData(filterCart);
+    setSelectedAll(!selectedAll);
   };
 
   const validateSelectedAll = () => {
-    const data = cartList.every(value => value.selected === true)
-    setselectedAll(data)
-  }
+    const data = cartList.every(value => value.selected);
+    setSelectedAll(data);
+  };
 
   useEffect(() => {
     handleCalculateTotalPrice();
@@ -77,65 +64,65 @@ const Cart = () => {
   }, [selectedCart]);
 
   const handleAddQuantity = (item) => {
-    const selectedItem = cartList.map(data => {
-      if (data.name === item.name) {
+    const updatedCartList = cartList.map(data => {
+      if (data.name === item.name && data.quantityorder < data.quantity) {
         return {
           ...data,
-          quantity: data.quantity + 1
-        }
+          quantityorder: data.quantityorder + 1,
+        };
       } else {
-        return data
+        return data;
       }
     });
-    setCartList(selectedItem);
-    handleFilterData(selectedItem);
-  }
-  const handlereduceQuantity = (item) => {
-    const selectedItem = cartList.map(data => {
-      if (data.name === item.name && data.quantity > 1) {
+    setCartList(updatedCartList);
+    handleFilterData(updatedCartList);
+  };
+
+  const handleReduceQuantity = (item) => {
+    const updatedCartList = cartList.map(data => {
+      if (data.name === item.name && data.quantityorder > 1) {
         return {
           ...data,
-          quantity: data.quantity - 1
-        }
+          quantityorder: data.quantityorder - 1,
+        };
       } else {
-        return data
+        return data;
       }
     });
-    setCartList(selectedItem);
-    handleFilterData(selectedItem);
-  }
+    setCartList(updatedCartList);
+    handleFilterData(updatedCartList);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.subContainer}>
-        <FlatList
-          data={cartList}
-          renderItem={({ item, index }) => {
-            return <CartItem item={item}
-              onCheckItem={() => handleCheckListCart(item)}
-              addQuantity={() => handleAddQuantity(item)}
-              reduceQuantity={() => handlereduceQuantity(item)}
-              onRemoveItem={() => { dispatch(removeFromCart(index)) }}
-            />;
-          }}
-        />
-      </View>
-
-      {/* Footer */}
+      <Text style={styles.title}>Your Cart</Text>
+      <FlatList
+        data={cartList}
+        renderItem={({ item, index }) => (
+          <CartItem
+            item={item}
+            onCheckItem={() => handleCheckListCart(item)}
+            addQuantity={() => handleAddQuantity(item)}
+            reduceQuantity={() => handleReduceQuantity(item)}
+            onRemoveItem={() => dispatch(removeFromCart(index))}
+          />
+        )}
+        keyExtractor={(item) => item.name}
+        contentContainerStyle={styles.listContent}
+      />
       <View style={styles.footer}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity style={styles.button} onPress={handleSetlectedAllCart}>
-            <Text style={styles.iconPlus}>{selectedAll ? "✔️" : ""}</Text>
+        <View style={styles.footerLeft}>
+          <TouchableOpacity style={styles.selectAllButton} onPress={handleSelectedAllCart}>
+            <Text style={styles.selectAllText}>{selectedAll ? '✔️' : ''}</Text>
           </TouchableOpacity>
-          <Text style={[styles.textFooter, { marginRight: 10 }]}>
-            Total Price
-          </Text>
-          <Text style={styles.textFooter}>đ {totalPrice}</Text>
+          <Text style={styles.footerText}>Total Price</Text>
+          <Text style={styles.footerPrice}>đ {totalPrice}</Text>
         </View>
         <TouchableOpacity
-          //onPress={() => console.log(selectedCart)}
-          style={[styles.buttonCheckout, { backgroundColor: '#0A8ED9' }]}>
-          <Text style={{ color: 'black' }}>Checkout</Text>
+          style={styles.checkoutButton}
+          onPress={() => console.log(selectedCart)}
+        >
+          <Text style={styles.checkoutText}>Checkout</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -147,40 +134,65 @@ export default Cart;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f8f8f8',
   },
-  subContainer: {
-    flex: 1,
-    padding: 15,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 20,
+    color: '#333',
+  },
+  listContent: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   footer: {
-    borderTopWidth: 0.5,
-    paddingLeft: 15,
-    borderColor: 'grey',
+    borderTopWidth: 1,
+    borderColor: '#e0e0e0',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#fff',
   },
-  textFooter: {
-    fontSize: 16,
-    fontWeight: '600',
+  footerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  buttonCheckout: {
-    backgroundColor: 'blue',
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-  },
-  button: {
-    borderWidth: 0.5,
+  selectAllButton: {
+    borderWidth: 1,
+    borderColor: '#d0d0d0',
     borderRadius: 4,
-    width: 25,
-    height: 25,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
   },
-  iconPlus: {
-    color: 'green',
+  selectAllText: {
+    fontSize: 16,
+    color: '#0A8ED9',
+  },
+  footerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginRight: 10,
+  },
+  footerPrice: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#0A8ED9',
+  },
+  checkoutButton: {
+    backgroundColor: '#0A8ED9',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 4,
+  },
+  checkoutText: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: '600',
   },
 });

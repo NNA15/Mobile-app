@@ -25,12 +25,16 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  quantityorder: {
+    type: Number,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const Product = mongoose.model("Product",productSchema);
+const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product
