@@ -1,20 +1,43 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const Account = () => {
   const [name, setName] = useState('');
   const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const storedName = await AsyncStorage.getItem('NAME');
-      if (storedName) setName(storedName);
-    };
+    
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (userId) {
+        const response = await axios.get(`http://192.168.1.122:8000/user/${userId}`);
+        // Xử lý dữ liệu từ response tại đây
+        console.log(response.data);
+        const userName = response.data.name;
+        setName(userName);
+      } else {
+        console.log("User ID invalid in AsyncStorage.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  const logout = async () => {
+    try {
+      // Xóa token từ AsyncStorage
+      await AsyncStorage.clear();
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -51,6 +74,13 @@ const Account = () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem}>
         <Text style={styles.menuText}>Offers</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem}
+        onPress={() => {
+          logout();
+        }}
+      >
+        <Text style={styles.menuText}>Log Out</Text>
       </TouchableOpacity>
     </View>
   );

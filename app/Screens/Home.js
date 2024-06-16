@@ -70,7 +70,7 @@ const Home = () => {
 
   const fetchData = async () => {
     try {
-      const respose = await axios.get('http://192.168.1.12:8000/product');
+      const respose = await axios.get('http://192.168.1.122:8000/product');
       const fetchProducts = respose.data;
       if (fetchProducts) {
         setProduct(fetchProducts);

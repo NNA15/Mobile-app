@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput, Alert } from 'react-native';
 import CommonButton from '../Components/CommonButton';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const ChangePassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -11,7 +13,7 @@ const ChangePassword = () => {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const navigation = useNavigation();
 
-    const handleChangePassword = () => {
+    const handleChangePassword = async() => {
         if (!oldPassword || !newPassword || !confirmPassword) {
             setError('Please fill in all fields');
             return;
@@ -20,14 +22,28 @@ const ChangePassword = () => {
             setError('New password and confirm password must match');
             return;
         }
-        // Add your password change logic here
-        // For demonstration, simply log the passwords
-        console.log('Old Password:', oldPassword);
-        console.log('New Password:', newPassword);
-        console.log('Confirm Password:', confirmPassword);
-
-        // Navigate back
-        navigation.goBack();
+        try {
+            const userId = await AsyncStorage.getItem("userId");
+            const response = await axios.post('http://192.168.1.122:8000/user/change_password', {
+              userId: userId, // Thay userId bằng giá trị userId của người dùng hiện tại
+              currentPassword: oldPassword,
+              newPassword: newPassword
+            });
+        
+            // Xử lý phản hồi từ API nếu cần
+            console.log(response.data); // In ra thông báo từ API nếu cần
+            Alert.alert("Thay đổi Password thành công.");
+            // Đặt lại các trường thông tin
+            setOldPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setError('');
+          } catch (error) {
+            // Xử lý lỗi từ API
+            console.error('Error changing password:', error);
+            setError('Error changing password. Please try again.');
+          }
+        
     };
 
     return (

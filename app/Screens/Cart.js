@@ -15,69 +15,22 @@ import { removeFromCart } from '../redux/actions/Actions';
 import axios from 'axios';
 import MomoPayment from '../MomoPayment/MomoPayment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useNavigation } from '@react-navigation/native';
+import { addItemToCart } from '../redux/actions/Actions';
 const Cart = () => {
+  const navigation = useNavigation();
   const [cartList, setCartList] = useState([]);
   const cartData = useSelector(state => state.Reducers);
   const dispatch = useDispatch();
-  const [selectedCart, setSelectedCar] = useState([]);
+  const [selectedCart, setSelectedCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedAll, setSelectedAll] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState([]);
 
-  const handleCheckOut = async () => {
-    const merchantname = "CGV Cinemas";
-    const merchantcode = "CGV01";
-    const merchantNameLabel = "Nhà cung cấp";
-    const billdescription = "Fast and Furious 8";
-    const enviroment = "0"; //"0": SANBOX , "1": PRODUCTION
-
-    let jsonData = {};
-    jsonData.enviroment = enviroment; //SANBOX OR PRODUCTION
-    jsonData.action = "gettoken"; //DO NOT EDIT
-    jsonData.merchantname = merchantname; //edit your merchantname here
-    jsonData.merchantcode = merchantcode; //edit your merchantcode here
-    jsonData.merchantnamelabel = merchantNameLabel;
-    jsonData.description = billdescription;
-    jsonData.amount = totalPrice;//order total amount
-    jsonData.orderId = "ID" + new Date().getTime();
-    jsonData.orderLabel = "Ma don hang";
-
-    const momoPaymentInstance = new MomoPayment();
-    momoPaymentInstance.requestMomoPayment(jsonData);
-  };
-
-  const createOrder = async () => {
-    const userId = await AsyncStorage.getItem("userId");
-    const orderData = {
-      user: userId,
-      products: [
-        selectedCart,
-      ],
-      totalPrice: 400, // Tổng giá
-      shippingAddress: {
-        name: "John Doe",
-        mobileNo: "123456789",
-        houseNo: "123",
-        street: "Main St",
-      },
-      paymentMethod: "MoMo", // Hoặc phương thức thanh toán khác
-    };
-    try {
-      const response = await axios.post('http://192.168.1.122:8000/order/', orderData);
-      if (response.status === 201) {
-        console.log("Order created successfully:", response.data);
-      } else {
-        console.error("Failed to create order:", response.data);
-      }
-    } catch (error) {
-      console.error("Error creating order:", error.message);
-    }
-  };
 
   const handleFilterData = (data) => {
     const filterData = data.filter(value => value.selected);
-    setSelectedCar(filterData);
+    setSelectedCart(filterData);
   };
 
   useEffect(() => {
@@ -120,8 +73,7 @@ const Cart = () => {
     const data = cartList.every(value => value.selected);
     setSelectedAll(data);
   };
-
-  useEffect(() => {
+useEffect(() => {
     handleCalculateTotalPrice();
     validateSelectedAll();
   }, [selectedCart]);
@@ -134,7 +86,6 @@ const Cart = () => {
           quantityorder: data.quantityorder + 1,
         };
       } else {
-        return data;
         return data;
       }
     });
@@ -184,7 +135,9 @@ const Cart = () => {
           <Text style={styles.footerPrice}>đ {totalPrice}</Text>
         </View>
         <TouchableOpacity
-          onPress={() => handleCheckOut()}
+          onPress={async () => {
+            navigation.navigate('CheckoutScreen');
+          }}
           style={[styles.checkoutButton, { backgroundColor: '#0A8ED9' }]}>
           <Text style={{ color: 'black' }}>Checkout</Text>
         </TouchableOpacity>
@@ -231,7 +184,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     alignItems: 'center',
-    justifyContent: 'center',
+justifyContent: 'center',
     marginRight: 10,
   },
   selectAllText: {

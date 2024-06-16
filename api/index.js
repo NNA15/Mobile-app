@@ -7,19 +7,21 @@ const nodemailer = require('nodemailer');
 const productRoutes = require('./Product/Product.js');
 const MomoPaymentRoutes = require('./MomoPayment/Momo.js');
 const userRoutes = require('./User/User.js');
+const orderRouters = require('./Order/Order.js');
 
 const app = express();
 const port = 8000;
 const cors = require('cors');
+app.use(express.json());
 
 app.use('/product', productRoutes);
 app.use('/momo', MomoPaymentRoutes);
 app.use('/user', userRoutes);
+app.use('/order', orderRouters);
 
 app.use(cors({origin: true, credentials: true}));
 
 app.use(express.urlencoded({extended: false}));
-app.use(express.json());
 
 const jwt = require('jsonwebtoken');
 app.listen(port, () => {
@@ -161,5 +163,78 @@ app.post('/login', async (req, res) => {
     res.status(200).json({token});
   } catch (error) {
     res.status(500).json({message: 'Login Failed'});
+  }
+});
+app.post("/addresses", async (req, res) => {
+  try {
+    const { userId, address } = req.body;
+
+    //find the user by the Userid
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    //add the new address to the user's addresses array
+    user.addresses.push(address);
+
+    //save the updated user in te backend
+    await user.save();
+
+    res.status(200).json({ message: "Address created Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error addding address" });
+  }
+});
+app.get("/addresses/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const addresses = user.addresses;
+    res.status(200).json({ addresses });
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieveing the addresses" });
+  }
+});
+app.delete("/addresses", async (req, res) => {
+  try {
+    const { userId, addressId } = req.body;
+
+    // Tìm người dùng bằng userId
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Tìm và xóa địa chỉ từ mảng addresses của người dùng
+    user.addresses = user.addresses.filter(address => address._id.toString() !== addressId);
+
+    // Lưu người dùng đã cập nhật vào cơ sở dữ liệu
+    await user.save();
+
+    res.status(200).json({ message: "Address deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting address:", error);
+    res.status(500).json({ message: "Error deleting address" });
+  }
+});
+app.get('/order/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const orders = await Order.find({user: userId}).populate('user');
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({message: 'No orders found for this user'});
+    }
+
+    res.status(200).json({orders});
+  } catch (error) {
+    res.status(500).json({message: 'Error'});
   }
 });

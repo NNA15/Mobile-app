@@ -15,6 +15,10 @@ import MyAddress from '../Screens/MyAddress';
 import AddAddress from '../Screens/AddAddress';
 import ChangePassword from '../Screens/ChangePassword';
 import CategoryProductList from '../Screens/CategoryProductList';
+import CheckoutScreen from '../Screens/CheckoutScreen';
+import SelectAddressScreen from '../Screens/SelectAddressScreen';
+import Orders from '../Screens/Orders';
+import OrderDetail from '../Screens/OrderDetail';
 const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
@@ -82,6 +86,27 @@ const AppNavigator = () => {
           name="CategoryProductList"
           component={CategoryProductList}
         />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="CheckoutScreen"
+          component={CheckoutScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SelectAddressScreen"
+          component={SelectAddressScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Orders"
+          component={Orders}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="OrderDetail"
+          component={OrderDetail}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

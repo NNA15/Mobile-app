@@ -26,6 +26,14 @@ const orderSchema = new mongoose.Schema({
       },
     },
   ],
+  productsPrice: {
+    type: Number,
+    required: true,
+  },
+  shippingPrice: {
+    type: Number,
+    required: true,
+  },
   totalPrice: {
     type: Number,
     required: true,
@@ -35,15 +43,19 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    mobileNo: {
-      type: String,
-      required: true,
-    },
-    houseNo: {
+    phone: {
       type: String,
       required: true,
     },
     street: {
+      type: String,
+      required: true,
+    },
+    district: {
+      type: String,
+      required: true,
+    },
+    city: {
       type: String,
       required: true,
     },

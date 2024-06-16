@@ -39,7 +39,8 @@ class MomoPayment extends Component {
   momoHandleResponse = async(response) => {
     try {
       if (response && response.status === 0) {
-        console.log("MomoHandleRespone: " , response);
+        // console.log("MomoHandleRespone: " , response.status);
+        console.log("Success Payment");
       } else {
         console.log("error ",response)
         Alert.alert('THANH TOÁN LỖI. VUI LÒNG THANH TOÁN LẠI.');
